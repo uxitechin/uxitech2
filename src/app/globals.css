@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-main: #FFFDF9;
+  --bg-warm: #F4F8FC;
+  --bg-surface: #FAFAF8;
+  --bg-neutral: #F5F5F3;
+  --text-primary: #171717;
+  --text-secondary: #6F6F6F;
+  --uxi-blue: #2C72B2;
+  --uxi-electric: #1D68BD;
+  --uxi-sky: #38BDF8;
+  --uxi-orange: #2C72B2;
+  --uxi-coral: #1D68BD;
+  --border-subtle: #EAEAE7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #FFFDF9;
+  color: #171717;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Luxury Light Selection */
+::selection {
+  background-color: #D5E7F7;
+  color: #171717;
+}
+
+/* Custom Refined Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FFFDF9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E5E4DE;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2C72B2;
+}
+
+/* Subtle Canvas Grid Texture */
+.canvas-grid {
+  background-size: 48px 48px;
+  background-image: 
+    linear-gradient(to right, rgba(23, 23, 23, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(23, 23, 23, 0.025) 1px, transparent 1px);
+}
+
+.canvas-radial-glow {
+  background: radial-gradient(circle at 50% 30%, rgba(44, 114, 178, 0.07) 0%, rgba(29, 104, 189, 0.03) 35%, transparent 70%);
+}
+
+.frosted-pill {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(234, 234, 231, 0.8);
+}
+
+/* Modern Geometric Tech Typography (No Italic Serifs) */
+.font-tech,
+.font-editorial {
+  font-family: var(--font-tech), var(--font-sans), system-ui, -apple-system, sans-serif;
+  font-style: normal;
+  letter-spacing: -0.01em;
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Liquid Metal Shader Animations */
+@keyframes liquid-metal-flow {
+  0% {
+    transform: rotate(0deg) scale(1.4);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.6);
+  }
+  100% {
+    transform: rotate(360deg) scale(1.4);
+  }
+}
+
+@keyframes shader-ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(4.5);
+    opacity: 0;
+  }
+}
+
+.animate-liquid-flow {
+  animation: liquid-metal-flow 6s linear infinite;
+  will-change: transform;
+}
+
+.group:hover .animate-liquid-flow {
+  animation-duration: 2.2s;
+}
