@@ -5,6 +5,8 @@ export interface IProjectEnquiry extends Document {
   email: string;
   phone?: string;
   company?: string;
+  businessName?: string;
+  businessType?: string;
   services: string[];
   description: string;
   budget: string;
@@ -20,6 +22,8 @@ const ProjectEnquirySchema: Schema<IProjectEnquiry> = new Schema(
     email: { type: String, required: true, trim: true, lowercase: true },
     phone: { type: String, trim: true, default: "" },
     company: { type: String, trim: true, default: "" },
+    businessName: { type: String, trim: true, default: "" },
+    businessType: { type: String, trim: true, default: "" },
     services: [{ type: String, required: true }],
     description: { type: String, required: true, trim: true },
     budget: { type: String, required: true },

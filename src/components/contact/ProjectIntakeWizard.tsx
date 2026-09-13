@@ -14,6 +14,7 @@ import {
   Mail,
   User,
   Phone,
+  Briefcase,
 } from "lucide-react";
 import Badge from "../ui/Badge";
 import Button from "../ui/Button";
@@ -47,6 +48,21 @@ const TIMELINE_OPTIONS = [
   "Flexible / Long-Term",
 ];
 
+const BUSINESS_TYPE_OPTIONS = [
+  "E-Commerce / D2C / Retail",
+  "Technology, SaaS & Software",
+  "Healthcare / Clinic / Hospital",
+  "Real Estate / Architecture / Construction",
+  "Education / Coaching / EdTech",
+  "B2B Services & Manufacturing",
+  "Agency / Media / Marketing",
+  "Restaurant / Food & Hospitality",
+  "Finance / Legal / Consulting",
+  "Personal Brand / Creator",
+  "Startup / Early Stage Venture",
+  "Other",
+];
+
 export default function ProjectIntakeWizard({
   initialService,
 }: {
@@ -63,7 +79,8 @@ export default function ProjectIntakeWizard({
     name: "",
     email: "",
     phone: "",
-    company: "",
+    businessName: "",
+    businessType: BUSINESS_TYPE_OPTIONS[0],
   });
 
   const [loading, setLoading] = useState(false);
@@ -95,8 +112,12 @@ export default function ProjectIntakeWizard({
       }
     }
     if (step === 5) {
-      if (!details.name.trim()) {
+      if (!details.name.trim() || details.name.trim().length < 2) {
         setErrorMsg("Please provide your full name.");
+        return false;
+      }
+      if (!details.phone.trim() || details.phone.trim().length < 7) {
+        setErrorMsg("Please provide your phone number so we can reach you.");
         return false;
       }
       if (
@@ -104,6 +125,10 @@ export default function ProjectIntakeWizard({
         !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(details.email.trim())
       ) {
         setErrorMsg("Please enter a valid email address.");
+        return false;
+      }
+      if (!details.businessName.trim()) {
+        setErrorMsg("Please provide your business or brand name.");
         return false;
       }
     }
@@ -138,7 +163,9 @@ export default function ProjectIntakeWizard({
           name: details.name,
           email: details.email,
           phone: details.phone,
-          company: details.company,
+          company: details.businessName,
+          businessName: details.businessName,
+          businessType: details.businessType,
           services: selectedServices,
           description,
           budget,
@@ -183,14 +210,16 @@ export default function ProjectIntakeWizard({
             YOUR IDEA IS ON ITS WAY.
           </h2>
           <p className="text-base text-[#6F6F6F]">
-            UXI will be in touch within 24 hours with an architectural consultation.
+            UXI has received your request. We will be in touch within 24 hours.
           </p>
         </div>
 
-        <div className="p-4 rounded-2xl bg-[#FAFAF8] border border-[#EAEAE7] text-left text-xs font-mono text-[#6F6F6F] space-y-1">
-          <p className="text-[#171717] font-bold">Summary Dispatched:</p>
+        <div className="p-4 rounded-2xl bg-[#FAFAF8] border border-[#EAEAE7] text-left text-xs font-mono text-[#6F6F6F] space-y-1.5">
+          <p className="text-[#171717] font-bold">Summary Dispatched to UXI:</p>
           <p>Name: {details.name}</p>
+          <p>Phone: {details.phone}</p>
           <p>Email: {details.email}</p>
+          <p>Business: {details.businessName} ({details.businessType})</p>
           <p>Capabilities: {selectedServices.join(", ")}</p>
         </div>
 
@@ -200,7 +229,13 @@ export default function ProjectIntakeWizard({
             setIsSuccess(false);
             setCurrentStep(1);
             setDescription("");
-            setDetails({ name: "", email: "", phone: "", company: "" });
+            setDetails({
+              name: "",
+              email: "",
+              phone: "",
+              businessName: "",
+              businessType: BUSINESS_TYPE_OPTIONS[0],
+            });
           }}
           className="text-xs font-bold uppercase tracking-wider text-[#2C72B2] hover:underline"
         >
@@ -407,14 +442,15 @@ export default function ProjectIntakeWizard({
           >
             <div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-[#171717] tracking-tight">
-                YOUR DETAILS
+                YOUR CONTACT & BUSINESS
               </h2>
               <p className="text-xs sm:text-sm text-[#6F6F6F] mt-1">
-                Where should we send your preliminary project roadmap?
+                Tell us how to reach you with your tailored roadmap & project estimate.
               </p>
             </div>
 
             <div className="space-y-4">
+              {/* Full Name */}
               <div>
                 <label className="block text-xs font-mono uppercase text-[#6F6F6F] mb-1">
                   Full Name *
@@ -428,33 +464,16 @@ export default function ProjectIntakeWizard({
                       setDetails({ ...details, name: e.target.value })
                     }
                     placeholder="e.g. Alex Morgan"
-                    className="w-full pl-10 pr-4 py-3 text-sm rounded-xl bg-[#FAFAF8] border border-[#EAEAE7] text-[#171717] focus:outline-none focus:border-[#2C72B2] focus:bg-white"
+                    className="w-full pl-10 pr-4 py-3 text-sm rounded-xl bg-[#FAFAF8] border border-[#EAEAE7] text-[#171717] focus:outline-none focus:border-[#2C72B2] focus:bg-white transition-colors"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-mono uppercase text-[#6F6F6F] mb-1">
-                  Email Address *
-                </label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 text-[#8E8E8E] absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="email"
-                    value={details.email}
-                    onChange={(e) =>
-                      setDetails({ ...details, email: e.target.value })
-                    }
-                    placeholder="alex@company.com"
-                    className="w-full pl-10 pr-4 py-3 text-sm rounded-xl bg-[#FAFAF8] border border-[#EAEAE7] text-[#171717] focus:outline-none focus:border-[#2C72B2] focus:bg-white"
-                  />
-                </div>
-              </div>
-
+              {/* Phone and Email */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-mono uppercase text-[#6F6F6F] mb-1">
-                    Phone (Optional)
+                    Phone Number *
                   </label>
                   <div className="relative">
                     <Phone className="w-4 h-4 text-[#8E8E8E] absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -465,26 +484,72 @@ export default function ProjectIntakeWizard({
                         setDetails({ ...details, phone: e.target.value })
                       }
                       placeholder="+91 98765 43210"
-                      className="w-full pl-10 pr-4 py-3 text-sm rounded-xl bg-[#FAFAF8] border border-[#EAEAE7] text-[#171717] focus:outline-none focus:border-[#2C72B2] focus:bg-white"
+                      className="w-full pl-10 pr-4 py-3 text-sm rounded-xl bg-[#FAFAF8] border border-[#EAEAE7] text-[#171717] focus:outline-none focus:border-[#2C72B2] focus:bg-white transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-xs font-mono uppercase text-[#6F6F6F] mb-1">
-                    Company / Organization
+                    Email Address *
+                  </label>
+                  <div className="relative">
+                    <Mail className="w-4 h-4 text-[#8E8E8E] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="email"
+                      value={details.email}
+                      onChange={(e) =>
+                        setDetails({ ...details, email: e.target.value })
+                      }
+                      placeholder="alex@company.com"
+                      className="w-full pl-10 pr-4 py-3 text-sm rounded-xl bg-[#FAFAF8] border border-[#EAEAE7] text-[#171717] focus:outline-none focus:border-[#2C72B2] focus:bg-white transition-colors"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Business Name and Business Type */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-mono uppercase text-[#6F6F6F] mb-1">
+                    Business / Brand Name *
                   </label>
                   <div className="relative">
                     <Building className="w-4 h-4 text-[#8E8E8E] absolute left-3.5 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
-                      value={details.company}
+                      value={details.businessName}
                       onChange={(e) =>
-                        setDetails({ ...details, company: e.target.value })
+                        setDetails({ ...details, businessName: e.target.value })
                       }
-                      placeholder="Acme Corp"
-                      className="w-full pl-10 pr-4 py-3 text-sm rounded-xl bg-[#FAFAF8] border border-[#EAEAE7] text-[#171717] focus:outline-none focus:border-[#2C72B2] focus:bg-white"
+                      placeholder="e.g. Acme Studio / Dr. Clinic"
+                      className="w-full pl-10 pr-4 py-3 text-sm rounded-xl bg-[#FAFAF8] border border-[#EAEAE7] text-[#171717] focus:outline-none focus:border-[#2C72B2] focus:bg-white transition-colors"
                     />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono uppercase text-[#6F6F6F] mb-1">
+                    Business Type / Industry
+                  </label>
+                  <div className="relative">
+                    <Briefcase className="w-4 h-4 text-[#8E8E8E] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <select
+                      value={details.businessType}
+                      onChange={(e) =>
+                        setDetails({ ...details, businessType: e.target.value })
+                      }
+                      className="w-full pl-10 pr-8 py-3 text-sm rounded-xl bg-[#FAFAF8] border border-[#EAEAE7] text-[#171717] focus:outline-none focus:border-[#2C72B2] focus:bg-white appearance-none cursor-pointer transition-colors"
+                    >
+                      {BUSINESS_TYPE_OPTIONS.map((bt) => (
+                        <option key={bt} value={bt}>
+                          {bt}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-[#8E8E8E] text-xs">
+                      ▼
+                    </div>
                   </div>
                 </div>
               </div>
@@ -530,7 +595,36 @@ export default function ProjectIntakeWizard({
                 ))}
               </div>
 
-              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-[#EAEAE7]">
+              {/* Client & Business Summary */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-[#EAEAE7]">
+                <div>
+                  <span className="block text-[11px] font-mono text-[#8E8E8E] uppercase">
+                    Contact Person
+                  </span>
+                  <span className="text-xs font-bold text-[#171717] block">
+                    {details.name}
+                  </span>
+                  <span className="text-[11px] text-[#6F6F6F] block">
+                    {details.phone}
+                  </span>
+                  <span className="text-[11px] text-[#2C72B2] block">
+                    {details.email}
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-[11px] font-mono text-[#8E8E8E] uppercase">
+                    Business / Brand
+                  </span>
+                  <span className="text-xs font-bold text-[#171717] block">
+                    {details.businessName || "Not specified"}
+                  </span>
+                  <span className="text-[11px] text-[#2C72B2] font-semibold block">
+                    {details.businessType}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 pt-3 border-t border-[#EAEAE7]">
                 <div>
                   <span className="block text-[11px] font-mono text-[#8E8E8E] uppercase">
                     Budget Tier
@@ -549,7 +643,7 @@ export default function ProjectIntakeWizard({
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-[#EAEAE7]">
+              <div className="pt-3 border-t border-[#EAEAE7]">
                 <span className="block text-[11px] font-mono text-[#8E8E8E] uppercase mb-1">
                   Project Brief
                 </span>
