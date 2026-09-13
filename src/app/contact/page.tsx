@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import Badge from "@/components/ui/Badge";
 import ProjectIntakeWizard from "@/components/contact/ProjectIntakeWizard";
-import { Mail, MapPin } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 
 export const metadata = {
   title: "Start a Project — UXI TECH",
@@ -44,34 +44,91 @@ export default function ContactPage({
       </Suspense>
 
       {/* Alternative Contact Direct Channels */}
-      <div className="pt-12 border-t border-[#EAEAE7] grid grid-cols-1 sm:grid-cols-2 gap-6 text-center sm:text-left max-w-2xl mx-auto">
-        <div className="p-6 rounded-2xl bg-[#FAFAF8] border border-[#EAEAE7] flex items-center gap-4">
-          <div className="w-10 h-10 rounded-xl bg-white border border-[#EAEAE7] flex items-center justify-center text-[#2C72B2] shrink-0">
-            <Mail className="w-5 h-5" />
+      <div className="pt-12 border-t border-[#EAEAE7] grid grid-cols-1 md:grid-cols-3 gap-6 text-left max-w-5xl mx-auto">
+        {/* Email */}
+        <div className="p-6 rounded-2xl bg-[#FAFAF8] border border-[#EAEAE7] flex flex-col justify-between space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white border border-[#EAEAE7] flex items-center justify-center text-[#2C72B2] shrink-0 shadow-sm">
+              <Mail className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-xs font-mono uppercase text-[#8E8E8E] block">
+                Official Mail
+              </span>
+              <h3 className="text-sm font-bold text-[#171717]">Inquiries & Proposals</h3>
+            </div>
           </div>
           <div>
-            <span className="text-xs font-mono uppercase text-[#8E8E8E] block">
-              Direct Mail
-            </span>
             <a
-              href="mailto:contact@uxitech.in"
-              className="text-sm font-bold text-[#171717] hover:text-[#2C72B2] transition-colors"
+              href="mailto:uxitech.in@gmail.com"
+              className="text-sm sm:text-base font-bold text-[#171717] hover:text-[#2C72B2] transition-colors break-all"
             >
-              contact@uxitech.in
+              uxitech.in@gmail.com
             </a>
+            <p className="text-xs text-[#6F6F6F] mt-1">Response within 24 hours</p>
           </div>
         </div>
 
-        <div className="p-6 rounded-2xl bg-[#FAFAF8] border border-[#EAEAE7] flex items-center gap-4">
-          <div className="w-10 h-10 rounded-xl bg-white border border-[#EAEAE7] flex items-center justify-center text-[#2C72B2] shrink-0">
-            <MapPin className="w-5 h-5" />
+        {/* Direct Call / Phone */}
+        <div className="p-6 rounded-2xl bg-[#FAFAF8] border border-[#EAEAE7] flex flex-col justify-between space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white border border-[#EAEAE7] flex items-center justify-center text-[#2C72B2] shrink-0 shadow-sm">
+              <Phone className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-xs font-mono uppercase text-[#8E8E8E] block">
+                Direct Line
+              </span>
+              <h3 className="text-sm font-bold text-[#171717]">Call & WhatsApp</h3>
+            </div>
+          </div>
+          <div className="space-y-1">
+            <div>
+              <a
+                href="tel:+919391781748"
+                className="text-sm font-bold text-[#171717] hover:text-[#2C72B2] transition-colors block"
+              >
+                +91 93917 81748
+              </a>
+            </div>
+            <div>
+              <a
+                href="tel:+919959593027"
+                className="text-sm font-bold text-[#171717] hover:text-[#2C72B2] transition-colors block"
+              >
+                +91 99595 93027
+              </a>
+            </div>
+            <div>
+              <a
+                href="tel:+917330820239"
+                className="text-sm font-bold text-[#171717] hover:text-[#2C72B2] transition-colors block"
+              >
+                +91 73308 20239
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Location */}
+        <div className="p-6 rounded-2xl bg-[#FAFAF8] border border-[#EAEAE7] flex flex-col justify-between space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white border border-[#EAEAE7] flex items-center justify-center text-[#2C72B2] shrink-0 shadow-sm">
+              <MapPin className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-xs font-mono uppercase text-[#8E8E8E] block">
+                Headquarters
+              </span>
+              <h3 className="text-sm font-bold text-[#171717]">Office Location</h3>
+            </div>
           </div>
           <div>
-            <span className="text-xs font-mono uppercase text-[#8E8E8E] block">
-              Location
-            </span>
-            <p className="text-sm font-bold text-[#171717]">
-              Bengaluru · Global Remote
+            <p className="text-sm font-bold text-[#171717] leading-snug">
+              Vijayawada, Andhra Pradesh
+            </p>
+            <p className="text-xs font-mono text-[#6F6F6F] mt-1">
+              PIN: 520013 · India
             </p>
           </div>
         </div>

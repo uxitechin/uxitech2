@@ -205,11 +205,29 @@ export default function Header() {
               <div>
                 <p className="text-xs text-[#6F6F6F] mb-1 font-semibold">Direct Inquiry</p>
                 <a
-                  href="mailto:contact@uxitech.in"
-                  className="text-base font-bold text-[#171717] hover:text-[#2C72B2] transition-colors"
+                  href="mailto:uxitech.in@gmail.com"
+                  className="text-base font-bold text-[#171717] hover:text-[#2C72B2] transition-colors block break-all"
                 >
-                  contact@uxitech.in
+                  uxitech.in@gmail.com
                 </a>
+                <div className="mt-2 space-y-1 text-xs text-[#6F6F6F]">
+                  <div>
+                    <a href="tel:+919391781748" className="font-semibold text-[#171717] hover:text-[#2C72B2]">
+                      +91 93917 81748
+                    </a>
+                  </div>
+                  <div>
+                    <a href="tel:+919959593027" className="font-semibold text-[#171717] hover:text-[#2C72B2]">
+                      +91 99595 93027
+                    </a>
+                  </div>
+                  <div>
+                    <a href="tel:+917330820239" className="font-semibold text-[#171717] hover:text-[#2C72B2]">
+                      +91 73308 20239
+                    </a>
+                  </div>
+                  <p className="pt-1 text-[#8E8E8E]">Vijayawada, Andhra Pradesh 520013</p>
+                </div>
               </div>
               <Button
                 href="/contact"

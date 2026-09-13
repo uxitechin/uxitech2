@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     console.error("Error submitting project enquiry:", error);
     return NextResponse.json(
-      { error: "Failed to process project request. Please try again or email contact@uxitech.in" },
+      { error: "Failed to process project request. Please try again or email uxitech.in@gmail.com" },
       { status: 500 }
     );
   }

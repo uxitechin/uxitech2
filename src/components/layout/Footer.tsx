@@ -79,17 +79,39 @@ export default function Footer() {
             <h4 className="text-xs font-bold uppercase tracking-widest text-[#6F6F6F]">
               Initiate
             </h4>
-            <div className="space-y-3">
-              <a
-                href="mailto:contact@uxitech.in"
-                className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#171717] hover:text-[#2C72B2] transition-colors"
-              >
-                contact@uxitech.in
-                <ArrowUpRight className="w-3.5 h-3.5 text-[#2C72B2] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </a>
-              <p className="text-xs text-[#6F6F6F]">
-                Bengaluru · Remote Worldwide
+            <div className="space-y-2.5">
+              <div>
+                <a
+                  href="mailto:uxitech.in@gmail.com"
+                  className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#171717] hover:text-[#2C72B2] transition-colors break-all"
+                >
+                  uxitech.in@gmail.com
+                  <ArrowUpRight className="w-3.5 h-3.5 text-[#2C72B2] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0" />
+                </a>
+              </div>
+
+              <div className="text-xs space-y-1 text-[#6F6F6F]">
+                <div>
+                  <a href="tel:+919391781748" className="hover:text-[#171717] transition-colors font-medium">
+                    +91 93917 81748
+                  </a>
+                </div>
+                <div>
+                  <a href="tel:+919959593027" className="hover:text-[#171717] transition-colors font-medium">
+                    +91 99595 93027
+                  </a>
+                </div>
+                <div>
+                  <a href="tel:+917330820239" className="hover:text-[#171717] transition-colors font-medium">
+                    +91 73308 20239
+                  </a>
+                </div>
+              </div>
+
+              <p className="text-xs text-[#6F6F6F] pt-1">
+                Vijayawada, Andhra Pradesh 520013
               </p>
+              
               <div className="pt-2">
                 <Button
                   href="/contact"
