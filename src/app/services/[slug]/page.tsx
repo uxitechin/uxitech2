@@ -1,21 +1,36 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, CheckCircle2, ArrowRight } from "lucide-react";
+import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
+import { connectToDatabase } from "@/lib/db/mongodb";
+import Service from "@/lib/db/models/Service";
 import { seedServices } from "@/lib/db/seedData";
 
-export async function generateStaticParams() {
-  return seedServices.map((s) => ({ slug: s.slug }));
+export const dynamic = "force-dynamic";
+
+async function getServiceData(slug: string) {
+  try {
+    await connectToDatabase();
+    const dbService = await Service.findOne({ slug, published: true }).lean();
+    if (dbService) {
+      return JSON.parse(JSON.stringify(dbService));
+    }
+  } catch (err) {
+    console.warn("DB lookup error for service, falling back to seedServices:", err);
+  }
+
+  const staticService = seedServices.find((s) => s.slug === slug);
+  return staticService || null;
 }
 
-export default function ServiceDetailPage({
+export default async function ServiceDetailPage({
   params,
 }: {
   params: { slug: string };
 }) {
-  const service = seedServices.find((s) => s.slug === params.slug);
+  const service = await getServiceData(params.slug);
 
   if (!service) {
     notFound();
@@ -100,7 +115,7 @@ export default function ServiceDetailPage({
             What We Deliver Under This Practice
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {service.capabilities.map((cap) => (
+            {service.capabilities?.map((cap: string) => (
               <div
                 key={cap}
                 className="p-4 rounded-2xl bg-white border border-[#EAEAE7] flex items-center gap-3 shadow-uxi-sm"
@@ -115,51 +130,55 @@ export default function ServiceDetailPage({
         </section>
 
         {/* Process Steps */}
-        <section className="space-y-6">
-          <span className="text-xs font-mono uppercase tracking-widest text-[#8E8E8E] font-bold">
-            Systematic Methodology
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#171717]">
-            How We Execute This Service
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {service.process.map((step) => (
-              <div
-                key={step.step}
-                className="p-6 rounded-2xl bg-[#FAFAF8] border border-[#EAEAE7] space-y-2 flex flex-col justify-between"
-              >
-                <div>
-                  <span className="text-xs font-mono font-bold text-[#2C72B2] block mb-2">
-                    Phase {step.step}
-                  </span>
-                  <h4 className="text-base font-bold text-[#171717]">
-                    {step.title}
-                  </h4>
+        {service.process && service.process.length > 0 && (
+          <section className="space-y-6">
+            <span className="text-xs font-mono uppercase tracking-widest text-[#8E8E8E] font-bold">
+              Systematic Methodology
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#171717]">
+              How We Execute This Service
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {service.process.map((step: any) => (
+                <div
+                  key={step.step}
+                  className="p-6 rounded-2xl bg-[#FAFAF8] border border-[#EAEAE7] space-y-2 flex flex-col justify-between"
+                >
+                  <div>
+                    <span className="text-xs font-mono font-bold text-[#2C72B2] block mb-2">
+                      Phase {step.step}
+                    </span>
+                    <h4 className="text-base font-bold text-[#171717]">
+                      {step.title}
+                    </h4>
+                  </div>
+                  <p className="text-xs text-[#6F6F6F] leading-relaxed pt-3 border-t border-[#EAEAE7]">
+                    {step.description}
+                  </p>
                 </div>
-                <p className="text-xs text-[#6F6F6F] leading-relaxed pt-3 border-t border-[#EAEAE7]">
-                  {step.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Tech Stack */}
-        <section className="p-8 rounded-3xl bg-white border border-[#EAEAE7] space-y-4">
-          <span className="text-xs font-mono uppercase tracking-widest text-[#8E8E8E] font-bold">
-            Technologies & Frameworks
-          </span>
-          <div className="flex flex-wrap gap-2">
-            {service.technologies.map((t) => (
-              <span
-                key={t}
-                className="px-3.5 py-1.5 rounded-xl bg-[#FAFAF8] text-xs font-mono font-semibold text-[#171717] border border-[#EAEAE7]"
-              >
-                {t}
-              </span>
-            ))}
-          </div>
-        </section>
+        {service.technologies && service.technologies.length > 0 && (
+          <section className="p-8 rounded-3xl bg-white border border-[#EAEAE7] space-y-4">
+            <span className="text-xs font-mono uppercase tracking-widest text-[#8E8E8E] font-bold">
+              Technologies & Frameworks
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {service.technologies.map((t: string) => (
+                <span
+                  key={t}
+                  className="px-3.5 py-1.5 rounded-xl bg-[#FAFAF8] text-xs font-mono font-semibold text-[#171717] border border-[#EAEAE7]"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
 
       {/* CTA Footer */}

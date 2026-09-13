@@ -8,7 +8,13 @@ import Button from "../ui/Button";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import { seedProjects } from "@/lib/db/seedData";
 
-export default function WorkPreviewSection() {
+export default function WorkPreviewSection({
+  projects = [],
+}: {
+  projects?: any[];
+}) {
+  const displayProjects = projects && projects.length > 0 ? projects : seedProjects;
+
   return (
     <section id="work" className="py-24 sm:py-32 bg-[#FFFFFF] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,7 +40,7 @@ export default function WorkPreviewSection() {
 
         {/* Asymmetric Project Presentation Showcase */}
         <div className="space-y-12">
-          {seedProjects.map((project, idx) => {
+          {displayProjects.map((project: any, idx: number) => {
             const isReversed = idx % 2 === 1;
 
             return (
@@ -73,7 +79,7 @@ export default function WorkPreviewSection() {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-1.5 pt-4 border-t border-[#EAEAE7]">
-                    {project.technologies.map((t) => (
+                    {project.technologies?.map((t: string) => (
                       <span
                         key={t}
                         className="px-2.5 py-0.5 rounded-full bg-[#FAFAF8] text-[10px] font-mono text-[#171717] border border-[#EAEAE7]"

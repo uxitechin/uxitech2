@@ -11,7 +11,14 @@ export interface IProjectEnquiry extends Document {
   description: string;
   budget: string;
   timeline: string;
-  status: "new" | "reviewed" | "contacted" | "archived";
+  status:
+    | "new"
+    | "contacted"
+    | "in_progress"
+    | "completed"
+    | "closed"
+    | "reviewed"
+    | "archived";
   createdAt: Date;
   updatedAt: Date;
 }
@@ -30,7 +37,15 @@ const ProjectEnquirySchema: Schema<IProjectEnquiry> = new Schema(
     timeline: { type: String, required: true },
     status: {
       type: String,
-      enum: ["new", "reviewed", "contacted", "archived"],
+      enum: [
+        "new",
+        "contacted",
+        "in_progress",
+        "completed",
+        "closed",
+        "reviewed",
+        "archived",
+      ],
       default: "new",
     },
   },

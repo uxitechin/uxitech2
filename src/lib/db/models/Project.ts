@@ -6,6 +6,7 @@ export interface IProject extends Document {
   client: string;
   category: string;
   services: string[];
+  shortDescription?: string;
   description: string;
   challenge: string;
   solution: string;
@@ -14,6 +15,7 @@ export interface IProject extends Document {
   technologies: string[];
   images: string[];
   featured: boolean;
+  published: boolean;
   order: number;
   createdAt: Date;
   updatedAt: Date;
@@ -26,6 +28,7 @@ const ProjectSchema: Schema<IProject> = new Schema(
     client: { type: String, required: true, trim: true },
     category: { type: String, required: true, trim: true },
     services: [{ type: String, required: true }],
+    shortDescription: { type: String, trim: true, default: "" },
     description: { type: String, required: true },
     challenge: { type: String, required: true },
     solution: { type: String, required: true },
@@ -34,6 +37,7 @@ const ProjectSchema: Schema<IProject> = new Schema(
     technologies: [{ type: String }],
     images: [{ type: String }],
     featured: { type: Boolean, default: false },
+    published: { type: Boolean, default: true },
     order: { type: Number, default: 0 },
   },
   {
@@ -41,6 +45,7 @@ const ProjectSchema: Schema<IProject> = new Schema(
   }
 );
 
+ProjectSchema.index({ published: 1, order: 1 });
 ProjectSchema.index({ featured: 1, order: 1 });
 
 export const Project: Model<IProject> =

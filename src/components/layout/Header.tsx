@@ -18,6 +18,12 @@ const NAV_LINKS = [
 
 export default function Header() {
   const pathname = usePathname();
+
+  // Do not render public header on admin routes
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   const [scrolled, setScrolled] = useState(false);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

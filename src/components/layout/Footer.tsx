@@ -1,10 +1,19 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 import UxiLogo from "../ui/UxiLogo";
 import Button from "../ui/Button";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  // Do not render public footer on admin routes
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
   return (
     <footer className="w-full bg-[#FAFAF8] border-t border-[#EAEAE7] text-[#171717] pt-20 pb-12 overflow-hidden relative">
       {/* Soft blue atmosphere */}

@@ -18,6 +18,7 @@ export interface IService extends Document {
   process: IServiceProcess[];
   technologies: string[];
   featured: boolean;
+  published: boolean;
   order: number;
   createdAt: Date;
   updatedAt: Date;
@@ -49,6 +50,7 @@ const ServiceSchema: Schema<IService> = new Schema(
     process: [ServiceProcessSchema],
     technologies: [{ type: String }],
     featured: { type: Boolean, default: false },
+    published: { type: Boolean, default: true },
     order: { type: Number, default: 0 },
   },
   {
@@ -56,6 +58,7 @@ const ServiceSchema: Schema<IService> = new Schema(
   }
 );
 
+ServiceSchema.index({ published: 1, order: 1 });
 ServiceSchema.index({ category: 1, order: 1 });
 
 export const Service: Model<IService> =

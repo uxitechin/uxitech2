@@ -327,76 +327,39 @@ export const seedProjects = [
     order: 3,
   },
 ];
-
-export const seedLabExperiments = [
+export const seedTestimonials = [
   {
-    title: "Neural Commerce Engine",
-    slug: "neural-commerce-engine",
-    category: "AI",
-    summary: "Contextual conversational commerce agent with real-time product ontology understanding.",
-    description:
-      "An experiment exploring conversational shopping where an autonomous LLM agent understands multi-dimensional user preferences, checks live stock, and constructs instant checkout payloads.",
-    interactionType: "Conversational prompt playground",
-    technologies: ["Next.js", "OpenAI Embeddings", "Vector Search", "Streaming UI"],
-    status: "beta",
-    published: true,
+    name: "Dr. K. Srinivas",
+    role: "Director of Operations",
+    company: "Apex Healthcare Systems",
+    quote:
+      "UXI re-architected our patient intake and WhatsApp appointment pipeline from the ground up. Our lead response latency dropped to under 15 seconds, and clinic bookings increased by 42% in the first quarter.",
+    projectSlug: "wasshot",
     featured: true,
+    published: true,
     order: 1,
   },
   {
-    title: "Parametric Mesh Sculptor",
-    slug: "parametric-mesh-sculptor",
-    category: "3D",
-    summary: "Real-time WebGL deformation driven by cursor velocity and organic noise.",
-    description:
-      "Investigating tactile digital material qualities through custom vertex shader displacement and real-time refractive glass lighting on a pure white canvas.",
-    interactionType: "Interactive 3D viewport with mouse physics",
-    technologies: ["Three.js", "React Three Fiber", "GLSL Shaders"],
-    status: "active",
-    published: true,
+    name: "Aakash Varma",
+    role: "Managing Partner",
+    company: "Bhuvika Creative Studio",
+    quote:
+      "The aesthetic craftsmanship UXI brought to our digital presence is extraordinary. Fluid typography, seamless motion, and a fast, responsive interface that immediately won high-ticket enterprise trust.",
+    projectSlug: "bhuvika-studio",
     featured: true,
+    published: true,
     order: 2,
   },
   {
-    title: "Autonomous CRM Lifecycle Engine",
-    slug: "autonomous-crm-lifecycle",
-    category: "AUTOMATION",
-    summary: "Self-healing customer journey state machine with automated escalation logic.",
-    description:
-      "A prototype automation engine that monitors incoming omnichannel signals, classifies customer intent with zero latency, and autonomously triggers personalized follow-up sequences.",
-    interactionType: "Live workflow visualizer with step execution simulator",
-    technologies: ["Node.js", "State Machines", "Webhooks", "SVG Pipelines"],
-    status: "active",
-    published: true,
+    name: "Rohan Patel",
+    role: "Chief Executive Officer",
+    company: "Flixios Streaming Tech",
+    quote:
+      "Unlike conventional agencies who just deliver static designs, UXI engineered an end-to-end cloud platform with custom CRM automation that executes 24/7 without manual intervention.",
+    projectSlug: "flixios",
     featured: true,
+    published: true,
     order: 3,
   },
-  {
-    title: "Inertial Micro-Interaction Kit",
-    slug: "inertial-micro-interaction-kit",
-    category: "EXPERIMENTAL UI",
-    summary: "Spring-physics layout transitions and magnetic target zones for light digital products.",
-    description:
-      "A library of subtle, luxury micro-interactions engineered specifically for light-mode studio interfaces. Zero visual noise, pure tactile responsiveness.",
-    interactionType: "Interactive UI control playground",
-    technologies: ["Framer Motion", "CSS Physics", "TypeScript"],
-    status: "active",
-    published: true,
-    featured: true,
-    order: 4,
-  },
-  {
-    title: "Algorithmic Identity Generator",
-    slug: "algorithmic-identity-generator",
-    category: "MOTION",
-    summary: "Generative brand asset engine constructing dynamic vector marks from mathematical seeds.",
-    description:
-      "Exploring how brand systems can evolve from a single seed dot into responsive typographic marks, color harmonies, and generative graphic grids.",
-    interactionType: "Seed parameter slider with real-time SVG generation",
-    technologies: ["SVG Canvas", "Mathematical Curves", "React"],
-    status: "concept",
-    published: true,
-    featured: false,
-    order: 5,
-  },
 ];
+

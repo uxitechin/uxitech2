@@ -3,7 +3,11 @@ import Link from "next/link";
 import { ArrowUpRight, CheckCircle2 } from "lucide-react";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
+import { connectToDatabase } from "@/lib/db/mongodb";
+import Service from "@/lib/db/models/Service";
 import { seedServices } from "@/lib/db/seedData";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Services & Capabilities — UXI TECH",
@@ -11,7 +15,22 @@ export const metadata = {
     "Explore UXI's 9 core capabilities across Build, Intelligence, Systems, Identity, Growth, and Technical Education.",
 };
 
-export default function ServicesPage() {
+async function getServices() {
+  try {
+    await connectToDatabase();
+    const services = await Service.find({ published: true }).sort({ order: 1 }).lean();
+    if (services && services.length > 0) {
+      return JSON.parse(JSON.stringify(services));
+    }
+  } catch (err) {
+    console.warn("Falling back to seedServices:", err);
+  }
+  return seedServices;
+}
+
+export default async function ServicesPage() {
+  const allServices = await getServices();
+
   const categories = [
     { name: "BUILD", desc: "Flagship Web & Mobile Engineering" },
     { name: "INTELLIGENCE", desc: "AI Automation & CRM Architecture" },
@@ -40,7 +59,7 @@ export default function ServicesPage() {
       {/* Grouped Services Categories */}
       <div className="space-y-16 sm:space-y-20">
         {categories.map((cat) => {
-          const catServices = seedServices.filter((s) => s.category === cat.name);
+          const catServices = allServices.filter((s: any) => s.category === cat.name);
           if (catServices.length === 0) return null;
 
           return (
@@ -58,7 +77,7 @@ export default function ServicesPage() {
               </div>
 
               <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:gap-8">
-                {catServices.map((service) => {
+                {catServices.map((service: any) => {
                   const isSingle = catServices.length === 1;
 
                   return (
@@ -71,7 +90,7 @@ export default function ServicesPage() {
                       <div className="space-y-3 sm:space-y-6">
                         <div className="flex items-center justify-between gap-1">
                           <Badge variant="neutral" className="text-[10px] sm:text-xs px-2 py-0.5 sm:px-2.5 sm:py-1">
-                            0{service.order}
+                            0{service.order || 1}
                           </Badge>
                           <Link
                             href={`/services/${service.slug}`}
@@ -100,7 +119,7 @@ export default function ServicesPage() {
                             Core Deliverables:
                           </span>
                           <div className="grid grid-cols-1 gap-1 sm:gap-1.5">
-                            {service.capabilities.slice(0, 3).map((cap) => (
+                            {service.capabilities?.slice(0, 3).map((cap: string) => (
                               <div
                                 key={cap}
                                 className="flex items-start gap-1 sm:gap-1.5 text-[10px] sm:text-xs text-[#171717]"
@@ -115,7 +134,7 @@ export default function ServicesPage() {
 
                       <div className="pt-3 sm:pt-6 mt-3 sm:mt-6 border-t border-[#EAEAE7] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
                         <div className="hidden sm:flex flex-wrap gap-1">
-                          {service.technologies.slice(0, 3).map((t) => (
+                          {service.technologies?.slice(0, 3).map((t: string) => (
                             <span
                               key={t}
                               className="px-2 py-0.5 rounded bg-white text-[10px] font-mono text-[#6F6F6F] border border-[#EAEAE7]"

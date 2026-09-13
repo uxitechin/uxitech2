@@ -6,7 +6,7 @@ import { seedProjects } from "@/lib/db/seedData";
 export async function GET() {
   try {
     await connectToDatabase();
-    const projects = await Project.find({}).sort({ order: 1, createdAt: -1 }).lean();
+    const projects = await Project.find({ published: { $ne: false } }).sort({ order: 1, createdAt: -1 }).lean();
     if (projects && projects.length > 0) {
       return NextResponse.json({ success: true, count: projects.length, data: projects });
     }

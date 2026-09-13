@@ -1,12 +1,18 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Preloader() {
+  const pathname = usePathname();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (pathname?.startsWith("/admin")) {
+      setLoading(false);
+      return;
+    }
     // Only run on client, dismiss after 1.1s
     const timer = setTimeout(() => {
       setLoading(false);

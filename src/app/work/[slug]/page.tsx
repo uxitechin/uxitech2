@@ -4,26 +4,55 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
+import { connectToDatabase } from "@/lib/db/mongodb";
+import Project from "@/lib/db/models/Project";
 import { seedProjects } from "@/lib/db/seedData";
 
-export async function generateStaticParams() {
-  return seedProjects.map((p) => ({ slug: p.slug }));
+export const dynamic = "force-dynamic";
+
+async function getProjectData(slug: string) {
+  try {
+    await connectToDatabase();
+    const dbProject = await Project.findOne({ slug, published: true }).lean();
+    if (dbProject) {
+      const allProjects = await Project.find({ published: true })
+        .sort({ order: 1, createdAt: -1 })
+        .lean();
+
+      const currentIndex = allProjects.findIndex((p: any) => p.slug === slug);
+      const next = allProjects[(currentIndex + 1) % allProjects.length] || dbProject;
+
+      return {
+        project: JSON.parse(JSON.stringify(dbProject)),
+        nextProject: JSON.parse(JSON.stringify(next)),
+      };
+    }
+  } catch (err) {
+    console.warn("DB lookup error, falling back to seedProjects:", err);
+  }
+
+  // Fallback to static seedProjects
+  const projectIndex = seedProjects.findIndex((p) => p.slug === slug);
+  if (projectIndex === -1) return null;
+
+  return {
+    project: seedProjects[projectIndex],
+    nextProject: seedProjects[(projectIndex + 1) % seedProjects.length],
+  };
 }
 
-export default function CaseStudyPage({
+export default async function CaseStudyPage({
   params,
 }: {
   params: { slug: string };
 }) {
-  const projectIndex = seedProjects.findIndex((p) => p.slug === params.slug);
-  const project = seedProjects[projectIndex];
+  const data = await getProjectData(params.slug);
 
-  if (!project) {
+  if (!data || !data.project) {
     notFound();
   }
 
-  const nextProject =
-    seedProjects[(projectIndex + 1) % seedProjects.length];
+  const { project, nextProject } = data;
 
   return (
     <article className="pt-28 sm:pt-32 pb-20 sm:pb-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -78,7 +107,7 @@ export default function CaseStudyPage({
               Services
             </span>
             <p className="text-xs font-semibold text-[#171717] mt-0.5">
-              {project.services.join(", ")}
+              {project.services?.join(", ")}
             </p>
           </div>
           <div>
@@ -86,7 +115,7 @@ export default function CaseStudyPage({
               Technologies
             </span>
             <div className="flex flex-wrap gap-1 mt-0.5">
-              {project.technologies.slice(0, 3).map((t) => (
+              {project.technologies?.slice(0, 3).map((t: string) => (
                 <span
                   key={t}
                   className="px-1.5 py-0.5 rounded bg-[#F5F5F3] text-[10px] font-mono text-[#171717]"
@@ -143,7 +172,7 @@ export default function CaseStudyPage({
                 Tech Stack Deployed:
               </span>
               <div className="flex flex-wrap gap-2">
-                {project.technologies.map((tech) => (
+                {project.technologies?.map((tech: string) => (
                   <span
                     key={tech}
                     className="px-3 py-1 rounded-xl bg-[#FAFAF8] text-xs font-mono text-[#171717] border border-[#EAEAE7]"

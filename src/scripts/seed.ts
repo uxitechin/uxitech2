@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
 import { Service } from "../lib/db/models/Service";
 import { Project } from "../lib/db/models/Project";
-import { LabExperiment } from "../lib/db/models/LabExperiment";
-import { seedServices, seedProjects, seedLabExperiments } from "../lib/db/seedData";
+import { Testimonial } from "../lib/db/models/Testimonial";
+import { Admin } from "../lib/db/models/Admin";
+import { SiteContent } from "../lib/db/models/SiteContent";
+import { seedServices, seedProjects, seedTestimonials } from "../lib/db/seedData";
+import bcrypt from "bcryptjs";
 
 const MONGODB_URI =
   process.env.MONGODB_URI ||
@@ -16,38 +19,52 @@ async function runSeed() {
     });
     console.log("Successfully connected to MongoDB!");
 
-    // Seed Services
+    // 1. Seed Master Admin
+    console.log("Seeding master administrator...");
+    const adminCount = await Admin.countDocuments();
+    if (adminCount === 0) {
+      const passwordHash = await bcrypt.hash("AdminPassword123!", 10);
+      await Admin.create({
+        name: "UXI Administrator",
+        email: "admin@uxitech.in",
+        passwordHash,
+        role: "superadmin",
+      });
+      console.log("Master administrator created: admin@uxitech.in");
+    }
+
+    // 2. Seed Services
     console.log("Seeding services...");
     for (const serviceData of seedServices) {
       await Service.findOneAndUpdate(
         { slug: serviceData.slug },
-        serviceData,
+        { ...serviceData, published: true },
         { upsert: true, new: true }
       );
     }
     console.log(`Upserted ${seedServices.length} services.`);
 
-    // Seed Projects
+    // 3. Seed Projects
     console.log("Seeding projects...");
     for (const projectData of seedProjects) {
       await Project.findOneAndUpdate(
         { slug: projectData.slug },
-        projectData,
+        { ...projectData, published: true },
         { upsert: true, new: true }
       );
     }
     console.log(`Upserted ${seedProjects.length} projects.`);
 
-    // Seed Lab Experiments
-    console.log("Seeding lab experiments...");
-    for (const labData of seedLabExperiments) {
-      await LabExperiment.findOneAndUpdate(
-        { slug: labData.slug },
-        labData,
+    // 4. Seed Testimonials
+    console.log("Seeding testimonials...");
+    for (const testData of seedTestimonials) {
+      await Testimonial.findOneAndUpdate(
+        { name: testData.name, company: testData.company },
+        testData,
         { upsert: true, new: true }
       );
     }
-    console.log(`Upserted ${seedLabExperiments.length} lab experiments.`);
+    console.log(`Upserted ${seedTestimonials.length} testimonials.`);
 
     console.log("Seeding completed successfully!");
   } catch (error) {

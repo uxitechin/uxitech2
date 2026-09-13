@@ -3,7 +3,11 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
+import { connectToDatabase } from "@/lib/db/mongodb";
+import Project from "@/lib/db/models/Project";
 import { seedProjects } from "@/lib/db/seedData";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Work & Case Studies — UXI TECH",
@@ -11,7 +15,25 @@ export const metadata = {
     "Real digital systems, web applications, and automation engines engineered for modern businesses.",
 };
 
-export default function WorkPage() {
+async function getProjects() {
+  try {
+    await connectToDatabase();
+    const projects = await Project.find({ published: true })
+      .sort({ order: 1, createdAt: -1 })
+      .lean();
+
+    if (projects && projects.length > 0) {
+      return JSON.parse(JSON.stringify(projects));
+    }
+  } catch (err) {
+    console.warn("Falling back to seedProjects:", err);
+  }
+  return seedProjects;
+}
+
+export default async function WorkPage() {
+  const projects = await getProjects();
+
   return (
     <div className="pt-28 sm:pt-32 pb-20 sm:pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
@@ -30,7 +52,7 @@ export default function WorkPage() {
 
       {/* Projects Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8">
-        {seedProjects.map((project) => (
+        {projects.map((project: any) => (
           <Link
             key={project.slug}
             href={`/work/${project.slug}`}
@@ -54,14 +76,14 @@ export default function WorkPage() {
                     {project.category}
                   </Badge>
                   <span className="text-[10px] sm:text-xs font-mono text-[#8E8E8E]">
-                    0{project.order}
+                    0{project.order || 1}
                   </span>
                 </div>
                 <h3 className="text-sm sm:text-xl font-bold text-[#171717] group-hover:text-[#2C72B2] transition-colors line-clamp-1">
                   {project.title}
                 </h3>
                 <p className="text-[11px] sm:text-xs text-[#6F6F6F] line-clamp-2 mt-1 sm:mt-2 leading-relaxed">
-                  {project.description}
+                  {project.shortDescription || project.description}
                 </p>
               </div>
             </div>
