@@ -11,6 +11,8 @@ interface Enquiry {
   email: string;
   phone?: string;
   company?: string;
+  businessName?: string;
+  businessType?: string;
   services: string[];
   description: string;
   budget: string;
@@ -148,13 +150,18 @@ export default function AdminPage() {
               className="p-6 rounded-2xl bg-white border border-[#EAEAE7] shadow-sm space-y-4 hover:border-[#2C72B2]/40 transition-colors"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#EAEAE7]">
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-2.5">
                   <span className="text-sm font-bold text-[#171717]">
                     {enq.name}
                   </span>
-                  {enq.company && (
-                    <span className="text-xs text-[#6F6F6F] flex items-center gap-1">
-                      <Building className="w-3 h-3" /> {enq.company}
+                  {(enq.businessName || enq.company) && (
+                    <span className="text-xs text-[#171717] font-semibold flex items-center gap-1 bg-[#FAFAF8] px-2.5 py-0.5 rounded-lg border border-[#EAEAE7]">
+                      <Building className="w-3 h-3 text-[#2C72B2]" /> {enq.businessName || enq.company}
+                    </span>
+                  )}
+                  {enq.businessType && (
+                    <span className="text-[10px] font-mono text-[#2C72B2] font-semibold bg-[#EBF3FA] px-2 py-0.5 rounded-md border border-[#D5E7F7]">
+                      {enq.businessType}
                     </span>
                   )}
                   <span className="px-2 py-0.5 rounded-full bg-[#EBF3FA] text-[10px] font-mono font-bold text-[#2C72B2] border border-[#D5E7F7]">
